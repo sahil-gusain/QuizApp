@@ -8,6 +8,7 @@ from django.conf import settings
 from datetime import date, timedelta
 from quiz import models as QMODEL
 from teacher import models as TMODEL
+from . import FaceDetection
 
 
 #for showing signup/login button for student
@@ -32,6 +33,7 @@ def student_signup_view(request):
             student.save()
             my_student_group = Group.objects.get_or_create(name='STUDENT')
             my_student_group[0].user_set.add(user)
+            FaceDetection.registerface(user.id)
         return HttpResponseRedirect('studentlogin')
     return render(request,'student/studentsignup.html',context=mydict)
 
