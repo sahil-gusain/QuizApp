@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from quiz import models as QMODEL
 from teacher import models as TMODEL
 from . import FaceDetection
+from django.contrib.auth import logout
 
 
 #for showing signup/login button for student
@@ -43,12 +44,20 @@ def is_student(user):
 @login_required(login_url='studentlogin')
 @user_passes_test(is_student)
 def student_dashboard_view(request):
+    current = request.user
+    check = FaceDetection.recognizeFace(current.id)
+    if check==False:
+        logout(request)
+        return render(request,'student/caught_cheating.html')
+    
     dict={
     
-    'total_course':QMODEL.Course.objects.all().count(),
-    'total_question':QMODEL.Question.objects.all().count(),
-    }
+            'total_course':QMODEL.Course.objects.all().count(),
+             'total_question':QMODEL.Question.objects.all().count(),
+         }
+    
     return render(request,'student/student_dashboard.html',context=dict)
+    
 
 @login_required(login_url='studentlogin')
 @user_passes_test(is_student)
