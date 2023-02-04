@@ -20,11 +20,8 @@ def recognizeFace(faceid):
    
          
          known = face_recognition.load_image_file(BASE_DIR + '/student/face/Image'+str(faceid)+'.jpg')
-         try:
-            known_encode = face_recognition.face_encodings(known)[0]
-         except IndexError as e:
-             ProperExit2(cam,faceid)
-             registerface(faceid)
+         known_encode = face_recognition.face_encodings(known)[0]
+         
          
          
          matches = face_recognition.compare_faces([known_encode], unknown_encode)
@@ -53,5 +50,10 @@ def registerface(faceid):
     
     cv2.imwrite('C:\\Users\\sahil\\Desktop\\Quizapp\\Quiz\\QuizApp\\Quiz\\student\\face\\Image'+str(faceid)+'.jpg',rgb_small_frame)
 
-# registerface(69)
-# recognizeFace(69)  
+    known = face_recognition.load_image_file(BASE_DIR + '/student/face/Image'+str(faceid)+'.jpg')
+    known_encode = face_recognition.face_encodings(known)[0]
+    try:
+        known_encode = face_recognition.face_encodings(known)[0]
+    except:
+        ProperExit2(cam,faceid)
+        registerface(faceid)
